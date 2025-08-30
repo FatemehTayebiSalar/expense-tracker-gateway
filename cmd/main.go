@@ -1,7 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"log"
+	"net/http"
+
+	"github.com/FatemehTayebiSalar/expense-tracker-gateway/routes"
+)
 
 func main() {
-	fmt.Println("Expense Tracker API Gateway is running...")
+	http.HandleFunc("/expenses", routes.AddExpenseRoute)
+	log.Println("Server is running on http://localhost:8081")
+	err := http.ListenAndServe(":8081", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
