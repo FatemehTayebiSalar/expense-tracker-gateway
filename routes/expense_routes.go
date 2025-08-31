@@ -1,16 +1,35 @@
 package routes
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
+
+	"github.com/FatemehTayebiSalar/expense-tracker-gateway/models"
 )
 
 // AddExpenseRoute
 func AddExpenseRoute(w http.ResponseWriter, r *http.Request) {
+
 	if r.Method != http.MethodPost {
-		http.Error(w, "Only Post method is allowed", http.StatusMethodNotAllowed)
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	fmt.Fprintln(w, "Hello from Post /expenses")
+	var expense models.Expense
+
+	if err := json.NewDecoder(r.Body).Decode(&expense); err != nil {
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		return
+	}
+
+	// TODO : Service Layer
+
+	response := map[string]interface{}{
+		"message": "Expense created succesfully",
+		"expense": expense,
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(response)
+
 }
