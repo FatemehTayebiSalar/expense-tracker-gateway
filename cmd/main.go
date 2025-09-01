@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/expenses", routes.AddExpenseRoute)
+	http.HandleFunc("/expenses", routes.CreateExpenseHandler)
 	log.Println("Server is running on http://localhost:8081")
 	err := http.ListenAndServe(":8081", nil)
 	if err != nil {

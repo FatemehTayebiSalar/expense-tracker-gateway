@@ -7,8 +7,8 @@ import (
 	"github.com/FatemehTayebiSalar/expense-tracker-gateway/models"
 )
 
-// AddExpenseRoute
-func AddExpenseRoute(w http.ResponseWriter, r *http.Request) {
+// CreateExpenseHandler handles POST /expenses requests
+func CreateExpenseHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -25,11 +25,13 @@ func AddExpenseRoute(w http.ResponseWriter, r *http.Request) {
 	// TODO : Service Layer
 
 	response := map[string]interface{}{
-		"message": "Expense created succesfully",
+		"message": "Expense created successfully",
 		"expense": expense,
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+	}
 
 }
