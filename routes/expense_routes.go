@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/FatemehTayebiSalar/expense-tracker-gateway/models"
+	"github.com/FatemehTayebiSalar/expense-tracker-gateway/services"
 )
 
 // CreateExpenseHandler handles POST /expenses requests
@@ -22,11 +23,15 @@ func CreateExpenseHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO : Service Layer
+	createdExpense, err := services.AddExpense(expense)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	response := map[string]interface{}{
 		"message": "Expense created successfully",
-		"expense": expense,
+		"expense": createdExpense,
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
