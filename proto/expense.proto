@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package expense;
+
+option go_package = "github.com/FatemehTayebiSalar/expense-tracker-gateway/expensepb";
+
+message Expense {
+    string id = 1;
+    string title = 2;
+    double amount = 3;
+    string category = 4;
+}
+
+message AddExpenseRequest {
+    Expense expense = 1;
+}
+
+message AddExpenseResponse {
+    string message = 1;
+    Expense expense = 2;
+}
+
+service ExpenseService {
+    rpc AddExpense(AddExpenseRequest) returns (AddExpenseResponse);
+}
